@@ -69,6 +69,7 @@ kubectl apply -f k8s/service.yaml
 
 # Get the service's external IP
 kubectl get service nginx-service
+```
 
 ## Terraform Configuration Explanation
 
