@@ -1,8 +1,7 @@
 # 🚀 AKS Infrastructure as Code and Deployment Project
 
 This repository showcases a complete end-to-end deployment of a web application on Azure Kubernetes Service (AKS) using Infrastructure as Code principles.
-
-![AKS Project Architecture Diagram](screenshots\diagram.png)
+![AKS Project Architecture Diagram](https://github.com/user-attachments/assets/dcbe7b23-3d67-4606-9af9-813dc74095d3)
 
 ## ✨ Project Overview
 
@@ -156,7 +155,10 @@ terraform destroy -auto-approve
 
 ## 🚀 Live Demo
 
+
 [http://172.179.122.42/](http://172.179.122.42/)
+
+![My Web](https://github.com/user-attachments/assets/84ecf0f7-1af8-475b-9e1b-dbfdc9804337)
 
 ## 📜 License
 
