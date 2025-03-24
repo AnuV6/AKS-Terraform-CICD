@@ -2,7 +2,7 @@
 
 This repository showcases a complete end-to-end deployment of a web application on Azure Kubernetes Service (AKS) using Infrastructure as Code principles.
 
-![Azure Kubernetes Service](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/demos/aks/images/kubernetes.png)
+![AKS Project Architecture Diagram](screenshots\diagram.png)
 
 ## ✨ Project Overview
 
