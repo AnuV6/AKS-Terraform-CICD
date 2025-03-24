@@ -45,8 +45,8 @@ Before starting, ensure you have the following tools installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/aks-iac-project.git
-cd aks-iac-project
+git clone https://github.com/AnuV6/AKS-Terraform-CICD.git
+cd AKS-Terraform-CICD
 ```
 
 ### 2. Set Up Azure Authentication
