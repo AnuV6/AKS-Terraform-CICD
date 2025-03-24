@@ -1,27 +1,31 @@
-# AKS Infrastructure as Code and Deployment Project
+# 🚀 AKS Infrastructure as Code and Deployment Project
 
-This repository contains Terraform configurations and Kubernetes manifests for deploying a simple web application on Azure Kubernetes Service (AKS).
+This repository showcases a complete end-to-end deployment of a web application on Azure Kubernetes Service (AKS) using Infrastructure as Code principles.
 
-## Project Overview
+![Azure Kubernetes Service](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/demos/aks/images/kubernetes.png)
 
-This project demonstrates how to:
-- Set up an AKS cluster using Terraform
-- Deploy applications to Kubernetes
-- Use ConfigMaps to customize application content
-- Implement Infrastructure as Code (IaC) principles
+## ✨ Project Overview
 
-## Prerequisites
+This project demonstrates modern DevOps practices by:
+- 🏗️ Setting up an AKS cluster using Terraform
+- 🚢 Deploying applications to Kubernetes
+- ⚙️ Using ConfigMaps to customize application content
+- 📝 Implementing Infrastructure as Code (IaC) principles
+- 🔄 Establishing a repeatable deployment process
 
-To use this repository, you'll need:
+## 📋 Prerequisites
 
-- Azure CLI
-- Terraform
-- kubectl
-- Git
-- Visual Studio Code
+Before starting, ensure you have the following tools installed:
 
-## Repository Structure
-```bash
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [Terraform](https://www.terraform.io/downloads.html)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Git](https://git-scm.com/downloads)
+- [Visual Studio Code](https://code.visualstudio.com/)
+
+## 📂 Repository Structure
+
+```
 ├── terraform/
 │   ├── providers.tf
 │   ├── variables.tf
@@ -30,64 +34,138 @@ To use this repository, you'll need:
 ├── k8s/
 │   ├── nginx-deployment.yaml
 │   ├── nginx-service.yaml
-│   ├── deployment.yaml 
-│   └── service.yaml 
+│   ├── deployment.yaml
+│   └── service.yaml
 └── myweb/
     └── index.html
 ```
-## Setup Instructions
 
-### 1. Deploy AKS Cluster with Terraform
+## 🔧 Step-by-Step Setup Instructions
+
+### 1. Clone the Repository
 
 ```bash
-# Navigate to terraform directory
-cd terraform
-
-# Log in to Azure
-az login
-
-# Initialize Terraform
-terraform init
-
-# Create execution plan
-terraform plan -out=tfplan
-
-# Apply the plan
-terraform apply tfplan
-
-# Configure kubectl to connect to AKS
-az aks get-credentials --resource-group aks-assignment-rg --name my-aks-cluster
-
-# Deploy NGINX with Custom Content
-
-# Create ConfigMap from custom HTML
-kubectl create configmap nginx-index-html-configmap --from-file=index.html=./myweb/index.html
-
-# Apply Kubernetes manifests
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-
-# Get the service's external IP
-kubectl get service nginx-service
+git clone https://github.com/yourusername/aks-iac-project.git
+cd aks-iac-project
 ```
 
-## Terraform Configuration Explanation
+### 2. Set Up Azure Authentication
 
-- **providers.tf**: Configures the Azure provider for Terraform
-- **variables.tf**: Defines variables for resource group, location, cluster name, etc.
-- **main.tf**: Contains the main Terraform code for creating the AKS cluster
-- **outputs.tf**: Outputs the Kubernetes configuration information
+```bash
+az login
+az account set --subscription "your-subscription-id"
+```
 
-## Kubernetes Manifests Explanation
+### 3. Deploy AKS Cluster with Terraform
 
-- **nginx-deployment.yaml**: Defines a deployment for NGINX with 2 replicas
-- **nginx-service.yaml**: Creates a LoadBalancer service to expose NGINX externally
-- **deployment.yaml**: (Example) Defines a deployment for an echo server
-- **service.yaml**: (Example) Creates a LoadBalancer service for the echo server
+```bash
+cd terraform
+terraform init
+terraform validate
+terraform plan -out=tfplan
+terraform apply tfplan
+```
 
-## Notes and Troubleshooting
+### 4. Configure kubectl to Connect to Your AKS Cluster
 
-- If you encounter issues with Kubernetes versions, remove the explicit version specification to let Azure select a default supported version.
-- Make sure to check the service's external IP address with `kubectl get service nginx-service` before trying to access it in a browser.
-- Custom content for NGINX is managed through a ConfigMap, which can be easily updated without rebuilding container images.
-- You can access the deployed my web application at: http://172.179.122.42/
+```bash
+az aks get-credentials --resource-group aks-assignment-rg --name my-aks-cluster
+kubectl get nodes
+```
+
+### 5. Prepare Your Custom Web Content
+
+```bash
+kubectl create configmap nginx-index-html-configmap --from-file=index.html=./myweb/index.html
+```
+
+### 6. Deploy the Web Application
+
+```bash
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl get deployments
+kubectl get pods
+kubectl get service nginx-service --watch
+```
+
+### 7. Access Your Web Application
+
+Once the external IP is provisioned:
+
+```
+http://172.179.122.42/
+```
+
+## 🔍 Terraform Configuration Details
+
+- **providers.tf**: Azure provider setup
+- **variables.tf**: Customizable variables
+- **main.tf**: AKS and resource group config
+- **outputs.tf**: Output variables like kube config
+
+## 🧩 Kubernetes Resources Explained
+
+- **nginx-deployment.yaml**: 2 replicas, resource limits, volume mounts
+- **nginx-service.yaml**: LoadBalancer service on port 80
+- **deployment.yaml**: Echo server example
+- **service.yaml**: Echo server service
+
+## 🛠️ Advanced Configuration Options
+
+### Scaling Your Application
+
+```bash
+kubectl scale deployment nginx-deployment --replicas=5
+```
+
+### Updating Your Web Content
+
+```bash
+nano ./myweb/index.html
+kubectl create configmap nginx-index-html-configmap --from-file=index.html=./myweb/index.html -o yaml --dry-run=client | kubectl apply -f -
+kubectl rollout restart deployment nginx-deployment
+```
+
+## 🔥 Troubleshooting Tips
+
+- **Version issues**: Let Azure choose AKS version
+- **No external IP**: Check quota/network with:
+  ```bash
+  kubectl describe service nginx-service
+  ```
+- **Pod issues**: Use logs:
+  ```bash
+  kubectl get pods
+  kubectl logs <pod-name>
+  ```
+- **ConfigMap not applying**: Restart deployment:
+  ```bash
+  kubectl rollout restart deployment nginx-deployment
+  ```
+
+## 🧹 Cleanup Resources
+
+```bash
+kubectl delete service nginx-service
+kubectl delete deployment nginx-deployment
+kubectl delete configmap nginx-index-html-configmap
+cd terraform
+terraform destroy -auto-approve
+```
+
+## 🚀 Live Demo
+
+[http://172.179.122.42/](http://172.179.122.42/)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to submit a Pull Request.
+
+---
+
+⭐ If you find this project helpful, please give it a star on GitHub! ⭐
